@@ -68,7 +68,8 @@ int main() {
 
   Solver solver(p, q, f, al1, be1, al2, be2, g1, g2, a, b);
 
-  double eps = 10e-3, err = 0;
+  double eps = 10e-3;
+  std::vector<double> err;
   std::vector<double> sol;
   sol = solver.solve_prec(eps, err);
   //draw_vect(sol, a, b);
@@ -83,6 +84,21 @@ int main() {
   //draw(x, sol, s);
 
   std::cout << s.value(0.5) << " " << s.value(1) << " " << s.value(1.5) << " " << s.value(2) << " " << s.value(2.5) << " " << s.value(3) << std::endl;
+  for(int i = 0; i < err.size(); i++) {
+    std::cout << err[i] << std::endl;
+  }
   
+  std::vector<double> sums;
+  for(int i = err.size() - 2; i >= 0; i--) {
+    double s = 0;
+    for(int j = err.size() - 1; j >= i; j--) {
+      s += err[j];
+    }
+    sums.push_back(s);
+  }
+  std::cout << "------------------" << std::endl;
+  for(int i = 0; i < sums.size(); i++) {
+    std::cout << sums[i] << std::endl;
+  }
   return 0;
 }

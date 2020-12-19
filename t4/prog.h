@@ -70,7 +70,7 @@ public:
     return *std::max_element(d.begin(), d.end());
   }
 
-  std::vector<double> solve_prec(double eps, double &err) {
+  std::vector<double> solve_prec(double eps, std::vector<double> &err) {
     int n = 10;
     std::vector<double> r1 = gen_r(n);
     std::vector<double> r2 = gen_r(2*n);
@@ -79,13 +79,14 @@ public:
     std::vector<double> res1(n, 0), res2(n, 0);
     res1 = solve(m1, r1);
     res2 = solve(m2, r2);
-    err = dist(res1, res2);
-    while(err > eps) {
+    double errl = dist(res1, res2);
+    while(errl > eps) {
       n *= 2;
       r1 = r2; r2 = gen_r(2*n);
       m1 = m2; m2 = gen_matrix(2*n);
       res1 = res2; res2 = solve(m2, r2);
-      err = dist(res1, res2);
+      err.push_back(dist(res1, res2));
+      errl = dist(res1, res2);
     }
     return res2;
   }
